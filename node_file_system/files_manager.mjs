@@ -1,11 +1,29 @@
 import fs from 'node:fs'
+import { resolve } from 'node:path'
 
 export function createFile(content) {
-  fs.writeFileSync('meuarquivo.txt', content)
+  return new Promise((resolve, reject) => {
+    fs.writeFile('meuarquivo.txt', content, (error)=> {
+      if(error){
+        reject("Erro ao escrever arquivo.", error.message)
+      } else{
+        resolve()
+      }
+    })
+
+  })
 }
 
 export function updateFile(content) {
-  fs.writeFileSync('meuarquivo.txt', content)
+  return new Promise((resolve, reject) => {
+    fs.writeFile('meuarquivo.txt', content, (error)=>{
+      if(error){
+        reject("Erro ao modificar arquivo.", error.message)
+      }else{
+        resolve("Arquivo modificado com sucesso!", content)
+      }
+    })
+  })
 }
 
 export function showFile() {
@@ -17,11 +35,15 @@ export function showFile() {
   }
 }
 
-export function deleteFile() {
-  try {
-    fs.unlinkSync('meuarquivo.txt')
-    console.log('Arquivo excluído com sucesso!')
-  } catch (error) {
-    console.error('Erro ao excluir o arquivo: ', error.message)
-  }
+export function deleteFile(path) {
+  return new Promise((resolve, reject) => {
+    fs.unlink(path, (error) => {
+      if(error){
+        reject('Erro ao excluir arquivo!', error.message)
+      }else{
+        console.log('Arquivo exlcuído com sucesso.')
+        resolve()
+      }
+    })
+  })
 }
